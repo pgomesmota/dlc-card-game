@@ -1,6 +1,7 @@
 # streamlit_app.py
 import random
 import streamlit as st
+from base64 import b64encode
 
 # ---------- App config ----------
 st.set_page_config(
@@ -12,7 +13,11 @@ st.set_page_config(
 # ---------- Brand / theme ----------
 BRAND_RED = "#E9462E"  # Red from the DLC logo
 BLACK = "#111111"
+
+# Load and encode logo (works locally or on Streamlit Cloud)
 LOGO_PATH = "dlc-logo.png"
+with open(LOGO_PATH, "rb") as f:
+    LOGO_B64 = b64encode(f.read()).decode()
 
 # ---------- Data: the two mini-decks ----------
 AI_CARDS = [
@@ -145,7 +150,7 @@ st.markdown(
     f"""
 <div class="header">
   <div class="logo">
-    <img src="{LOGO_PATH}" alt="DLC logo">
+    <img src="data:image/png;base64,{LOGO_B64}" alt="DLC logo">
   </div>
   <div class="titles">
     <h1>Data & AI Literacy - Card Game</h1>
