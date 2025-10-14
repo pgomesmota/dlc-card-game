@@ -10,10 +10,9 @@ st.set_page_config(
 )
 
 # ---------- Brand / theme ----------
-# Red sampled to match the DLC logo (tweak if you have the exact hex)
-BRAND_RED = "#E9462E"
+BRAND_RED = "#E9462E"  # Red from the DLC logo
 BLACK = "#111111"
-LOGO_PATH = "dlc-logo.png"
+LOGO_PATH = "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"
 
 # ---------- Data: the two mini-decks ----------
 AI_CARDS = [
@@ -26,7 +25,7 @@ DATA_CARDS = [
     "Leadership", "Tools", "Governance", "Mindset", "Culture"
 ]
 
-# ---------- Minimal style (mobile-first) ----------
+# ---------- Style (escaped correctly) ----------
 CARD_CSS = f"""
 <style>
 :root {{
@@ -69,7 +68,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-}
+}}
 @media (max-width: 768px) {{
   .cards {{
     grid-template-columns: 1fr;
@@ -105,7 +104,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   color: var(--accent);
   font-weight: 600;
 }}
-/* Button: larger touch target + brand color */
+/* Button */
 .stButton > button {{
   width: 100%;
   padding: 14px 16px;
@@ -119,7 +118,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 .stButton > button:hover {{
   filter: brightness(0.95);
 }}
-/* Tip footer */
+/* Footer */
 .footer {{
   text-align: center;
   color: var(--text);
@@ -142,22 +141,20 @@ def deal_pair():
 
 # ---------- UI ----------
 # Header with logo + titles
-col_header = st.container()
-with col_header:
-    st.markdown(
-        """
+st.markdown(
+    f"""
 <div class="header">
   <div class="logo">
-    <img src="{}" alt="DLC logo">
+    <img src="{LOGO_PATH}" alt="DLC logo">
   </div>
   <div class="titles">
     <h1>Data & AI Literacy - Card Game</h1>
     <p><span style="color: var(--accent); font-weight: 700;">Deal a pair:</span> one <b>AI</b> card (question) + one <b>DATA</b> card (domain).</p>
   </div>
 </div>
-""".format(LOGO_PATH),
-        unsafe_allow_html=True,
-    )
+""",
+    unsafe_allow_html=True,
+)
 
 # Cards (responsive grid)
 st.markdown('<div class="cards">', unsafe_allow_html=True)
@@ -191,7 +188,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Generate button
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
 
-# Footer tip (keep; no “Inspiration” text)
+# Footer tip
 st.markdown(
     """
 <div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>
