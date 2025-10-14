@@ -11,7 +11,7 @@ st.set_page_config(page_title="Data & AI Literacy - Card Game", page_icon="🧠"
 DLC_ORANGE = "#EF4D37"
 
 def load_logo_b64():
-    p = Path("assets/dlc-logo.png")
+    p = Path("dlc-logo.png")
     if p.exists():
         return base64.b64encode(p.read_bytes()).decode("utf-8")
     return None
