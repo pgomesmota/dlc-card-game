@@ -12,7 +12,7 @@ st.set_page_config(
 # ---------- Brand / theme ----------
 BRAND_RED = "#E9462E"  # Red from the DLC logo
 BLACK = "#111111"
-LOGO_PATH = "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"
+LOGO_PATH = "dlc-logo.png"
 
 # ---------- Data: the two mini-decks ----------
 AI_CARDS = [
