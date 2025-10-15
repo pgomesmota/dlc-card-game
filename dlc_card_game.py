@@ -69,21 +69,40 @@ html, body, [data-testid="stAppViewContainer"] {{
   margin-bottom: 1rem; text-align: center;
 }}
 .header .top {{ display: flex; align-items: center; justify-content: center; gap: 12px; }}
-.header .top img {{ width: 72px; height: auto; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }}
-.header .top h1 {{ margin: 0; font-size: clamp(1.5rem, 4vw, 2.3rem); color: var(--text); font-weight: 900; }}
+.header .top img {{
+  width: 72px; height: auto; border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}}
+.header .top h1 {{
+  margin: 0;
+  font-size: clamp(1.2rem, 3.8vw, 2.3rem);
+  color: var(--text);
+  font-weight: 900;
+  white-space: nowrap;      /* prevent line breaks */
+  overflow: hidden;
+  text-overflow: ellipsis;  /* ensure no wrapping on mobile */
+  max-width: 100%;
+}}
+@media (max-width: 430px) {{
+  .header .top h1 {{
+    font-size: 1.15rem;      /* slightly smaller for iPhone */
+  }}
+}}
 
-/* One-line subtitle: no wraps */
 .header .subtitle {{
   margin-top: .4rem;
   font-size: clamp(.9rem, 2.5vw, 1.05rem);
   color: var(--text);
-  white-space: nowrap;           /* keep on one line */
-  overflow: hidden;              /* safeguard */
-  text-overflow: ellipsis;       /* if ever too narrow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }}
-.header .subtitle .accent, .header .subtitle b {{ color: var(--accent); font-weight: 800; }}
+.header .subtitle .accent, .header .subtitle b {{
+  color: var(--accent);
+  font-weight: 800;
+}}
 
-/* Cards Row (side-by-side, even on mobile) */
+/* Cards Row */
 .cards-row {{
   display: flex; flex-direction: row; justify-content: center; align-items: stretch;
   gap: 14px; flex-wrap: nowrap; margin-top: 10px; margin-bottom: 24px;
@@ -106,47 +125,58 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 .card .icon {{ display: flex; justify-content: center; align-items: center; margin-top: 4px; }}
 .card .icon img {{ width: 64px; height: 64px; object-fit: contain; }}
-.card .title {{ font-size: clamp(1rem, 3.4vw, 1.35rem); font-weight: 900; text-align: center; line-height: 1.2; }}
-
-/* Hint: uppercase and bold */
+.card .title {{
+  font-size: clamp(1rem, 3.4vw, 1.35rem);
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.2;
+}}
 .card .hint {{
   font-size: clamp(.75rem, 2.6vw, .9rem);
   color: var(--accent);
   font-weight: 800;
-  text-transform: uppercase;     /* ensure capitals */
+  text-transform: uppercase;
   text-align: center;
   margin-bottom: 4px;
 }}
 .card.face-down {{ border-style: dashed; }}
 .card.face-down .title {{ color: var(--accent); letter-spacing: 1px; }}
 
-/* Button: always red + press feel */
+/* Button: always red with press feel */
 .stButton > button {{
-  width: 100%; padding: 12px 14px; border-radius: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
   border: 2px solid var(--accent);
-  background: var(--accent) !important;  /* always red */
+  background: var(--accent) !important;
   color: #fff !important;
-  font-weight: 800; font-size: 1rem;
+  font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 6px 0 rgba(181, 52, 32, 0.9);  /* fake depth */
-  transition: transform 80ms ease, box-shadow 80ms ease;  /* press feel */
+  box-shadow: 0 6px 0 rgba(181, 52, 32, 0.9);
+  transition: transform 80ms ease, box-shadow 80ms ease;
   outline: none !important;
 }}
-.stButton > button:hover {{
-  filter: brightness(0.98);
-}}
+.stButton > button:hover {{ filter: brightness(0.98); }}
 .stButton > button:active {{
-  background: var(--accent) !important; color: #fff !important;
-  transform: translateY(2px);                 /* pressed */
-  box-shadow: 0 3px 0 rgba(181, 52, 32, 0.9); /* reduced depth */
+  background: var(--accent) !important;
+  color: #fff !important;
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 rgba(181, 52, 32, 0.9);
 }}
-.stButton > button:focus {{ box-shadow: 0 6px 0 rgba(181, 52, 32, 0.9) !important; }}
+.stButton > button:focus {{
+  box-shadow: 0 6px 0 rgba(181, 52, 32, 0.9) !important;
+}}
 
-/* Footer tip: one line, no wraps */
+/* Footer Tip: one line */
 .footer {{
-  text-align: center; color: var(--text);
-  font-size: .9rem; margin-top: .8rem;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-align: center;
+  color: var(--text);
+  font-size: .9rem;
+  margin-top: .8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }}
 </style>
 """
@@ -181,7 +211,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------- Cards (flexbox row) ----------
+# ---------- Cards ----------
 if st.session_state.revealed:
     cards_html = f"""
 <div class="cards-row">
