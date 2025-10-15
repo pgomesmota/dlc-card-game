@@ -74,25 +74,24 @@ html, body, [data-testid="stAppViewContainer"] {{
 .header .subtitle {{ margin-top: .4rem; font-size: clamp(.9rem, 2.5vw, 1.05rem); color: var(--text); }}
 .header .subtitle .accent, .header .subtitle b {{ color: var(--accent); font-weight: 800; }}
 
-/* --- NEW: Cards row that forces side-by-side --- */
+/* Cards Row */
 .cards-row {{
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
   gap: 14px;
-  flex-wrap: nowrap;            /* never wrap to next line */
+  flex-wrap: nowrap;
   margin-top: 10px;
-  margin-bottom: 24px;          /* space above the button */
+  margin-bottom: 24px;
 }}
-/* On very small screens keep them side-by-side and shrink */
 @media (max-width: 430px) {{
   .cards-row {{ gap: 10px; }}
 }}
 
 /* Card base */
 .card {{
-  width: clamp(130px, 44vw, 210px); /* ~2 cards on iPhone widths */
+  width: clamp(130px, 44vw, 210px);
   aspect-ratio: 2 / 3;
   border-radius: 14px;
   padding: 12px 10px;
@@ -111,14 +110,35 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Button */
 .stButton > button {{
-  width: 100%; padding: 12px 14px; border-radius: 12px;
-  border: 2px solid var(--accent); background: var(--accent); color: #fff;
-  font-weight: 800; font-size: 1rem;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid var(--accent);
+  background: var(--accent) !important;  /* Force red always */
+  color: #fff !important;
+  font-weight: 800;
+  font-size: 1rem;
+  transition: none !important;
 }}
-.stButton > button:hover {{ filter: brightness(0.95); }}
+.stButton > button:hover {{
+  filter: brightness(0.95);
+}}
+/* Prevent color change on click/active */
+.stButton > button:active,
+.stButton > button:focus {{
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  outline: none !important;
+}}
 
 /* Footer */
-.footer {{ text-align: center; color: var(--text); font-size: .9rem; margin-top: .8rem; }}
+.footer {{
+  text-align: center;
+  color: var(--text);
+  font-size: .9rem;
+  margin-top: .8rem;
+}}
 </style>
 """
 st.markdown(CARD_CSS, unsafe_allow_html=True)
@@ -152,7 +172,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------- Cards (single HTML row to FORCE side-by-side) ----------
+# ---------- Cards (flexbox for perfect alignment) ----------
 if st.session_state.revealed:
     cards_html = f"""
 <div class="cards-row">
