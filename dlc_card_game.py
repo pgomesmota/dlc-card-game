@@ -19,7 +19,7 @@ def find_image(cands):
     return None
 
 # ---------- Assets ----------
-LOGO_PATH = find_image(["dlc-logo.png","./dlc-logo.png","/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"])
+LOGO_PATH = find_image(["dlc-logo.png","./dlc-logo.png"])
 AI_ICON_PATH = find_image(["ai-icon.png","./ai-icon.png"])
 DATA_ICON_PATH = find_image(["data-icon.png","./data-icon.png"])
 
@@ -102,20 +102,21 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Cards grid: two columns, even on mobile */
+/* Cards container — side by side and vertically centered */
 .cards {{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  justify-items: center;
-  align-items: start;
-  gap: 12px;
-  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 12px;
+  text-align: center;
 }}
 
-/* Card base: portrait, phone-friendly sizing */
+/* Card base: portrait, mobile-friendly */
 .card {{
-  width: clamp(140px, 42vw, 300px);   /* fits two across on phones */
-  aspect-ratio: 2 / 3;                /* portrait */
+  width: clamp(130px, 40vw, 240px);
+  aspect-ratio: 2 / 3;
   border-radius: 14px;
   padding: 14px 12px;
   border: 2px solid var(--accent);
@@ -133,7 +134,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2px;
+  margin-top: 4px;
 }}
 .card .icon img {{
   width: 44px;
@@ -151,7 +152,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   color: var(--accent);
   font-weight: 700;
   text-align: center;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }}
 .card.face-down {{
   border-style: dashed;
@@ -218,7 +219,7 @@ st.markdown(
 st.markdown('<div class="cards">', unsafe_allow_html=True)
 
 if st.session_state.revealed:
-    # AI card (face-up)
+    # AI card
     st.markdown(
         f"""
 <div class="card">
@@ -229,7 +230,7 @@ if st.session_state.revealed:
 """,
         unsafe_allow_html=True,
     )
-    # DATA card (face-up)
+    # DATA card
     st.markdown(
         f"""
 <div class="card">
