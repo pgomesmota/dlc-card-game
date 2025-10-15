@@ -5,7 +5,7 @@ import streamlit as st
 # ---------- Brand / assets ----------
 BRAND_RED = "#E9462E"             # DLC red
 BLACK = "#111111"
-LOGO_PATH = "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"  # DLC square logo
+LOGO_PATH = "dlc-logo.png"  # DLC square logo
 
 # ---------- App config ----------
 st.set_page_config(
