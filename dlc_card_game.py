@@ -102,39 +102,23 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Cards container — always side by side, centered */
-.cards {{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: nowrap;
-  margin-top: 12px;
-  text-align: center;
-}}
-@media (max-width: 600px) {{
-  .cards {{
-    gap: 12px;
-    transform: scale(0.9);
-  }}
-}}
-
-/* Card base: portrait, responsive */
+/* Card base: portrait, mobile-friendly and centered in column */
 .card {{
-  width: clamp(140px, 38vw, 240px);
+  width: min(320px, 90%);
   aspect-ratio: 2 / 3;
   border-radius: 14px;
   padding: 16px 14px;
   border: 2px solid var(--accent);
   background: #fff;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   color: var(--text);
+  margin: 0 auto; /* center inside column */
 }}
 .card .icon {{
   display: flex;
@@ -161,13 +145,8 @@ html, body, [data-testid="stAppViewContainer"] {{
   text-align: center;
   margin-bottom: 4px;
 }}
-.card.face-down {{
-  border-style: dashed;
-}}
-.card.face-down .title {{
-  color: var(--accent);
-  letter-spacing: 1px;
-}}
+.card.face-down {{ border-style: dashed; }}
+.card.face-down .title {{ color: var(--accent); letter-spacing: 1px; }}
 
 /* Button */
 .stButton > button {{
@@ -222,56 +201,55 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------- Cards ----------
-st.markdown('<div class="cards">', unsafe_allow_html=True)
+# ---------- Cards (side by side using columns) ----------
+col1, col2 = st.columns(2, gap="large")
 
 if st.session_state.revealed:
-    # AI card
-    st.markdown(
-        f"""
+    with col1:
+        st.markdown(
+            f"""
 <div class="card">
   <div class="icon">{'<img src="'+AI_ICON_URI+'" alt="AI icon">' if AI_ICON_URI else ''}</div>
   <div class="title">{st.session_state.ai_pick}</div>
   <div class="hint">AI card</div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
-    # DATA card
-    st.markdown(
-        f"""
+            unsafe_allow_html=True,
+        )
+    with col2:
+        st.markdown(
+            f"""
 <div class="card">
   <div class="icon">{'<img src="'+DATA_ICON_URI+'" alt="DATA icon">' if DATA_ICON_URI else ''}</div>
   <div class="title">{st.session_state.data_pick.upper()}</div>
   <div class="hint">DATA card</div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
 else:
-    # Face-down cards
-    st.markdown(
-        f"""
+    with col1:
+        st.markdown(
+            f"""
 <div class="card face-down">
   <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
   <div class="title">?</div>
   <div class="hint">AI card</div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f"""
+            unsafe_allow_html=True,
+        )
+    with col2:
+        st.markdown(
+            f"""
 <div class="card face-down">
   <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
   <div class="title">?</div>
   <div class="hint">DATA card</div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
-
-st.markdown('</div>', unsafe_allow_html=True)
+            unsafe_allow_html=True,
+        )
 
 # ---------- Button & Footer ----------
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
