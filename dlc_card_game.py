@@ -58,10 +58,15 @@ CARD_CSS = f"""
   --bg: #ffffff;
 }}
 html, body, [data-testid="stAppViewContainer"] {{
-  background: var(--bg) !important; color: var(--text);
-  margin: 0 !important; padding: 0 !important;
+  background: var(--bg) !important;
+  color: var(--text);
+  margin: 0 !important;
+  padding: 0 !important;
 }}
-[data-testid="stElementContainer"] {{ padding: 0 !important; margin: 0 !important; }}
+[data-testid="stElementContainer"] {{
+  padding: 0 !important;
+  margin: 0 !important;
+}}
 
 /* Header */
 .header {{
@@ -69,7 +74,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.0rem;
+  margin-bottom: 1rem;
   text-align: center;
 }}
 .header .top {{
@@ -86,14 +91,13 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 .header .top h1 {{
   margin: 0;
-  font-size: clamp(1.6rem, 4.6vw, 2.4rem);
-  line-height: 1.12;
+  font-size: clamp(1.5rem, 4vw, 2.3rem);
   color: var(--text);
   font-weight: 900;
 }}
 .header .subtitle {{
   margin-top: 0.4rem;
-  font-size: clamp(0.96rem, 3vw, 1.06rem);
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
   color: var(--text);
 }}
 .header .subtitle .accent,
@@ -104,10 +108,10 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Card base */
 .card {{
-  width: min(320px, 90%);
+  width: clamp(120px, 35vw, 180px);  /* smaller for iPhone */
   aspect-ratio: 2 / 3;
   border-radius: 14px;
-  padding: 16px 14px;
+  padding: 12px 10px;
   border: 2px solid var(--accent);
   background: #fff;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
@@ -126,32 +130,27 @@ html, body, [data-testid="stAppViewContainer"] {{
   margin-top: 4px;
 }}
 .card .icon img {{
-  width: 88px;
-  height: 88px;
+  width: 64px;  /* reduced for mobile */
+  height: 64px;
   object-fit: contain;
 }}
 .card .title {{
-  font-size: clamp(1.1rem, 3.8vw, 1.6rem);
+  font-size: clamp(1rem, 3vw, 1.3rem);
   font-weight: 900;
   text-align: center;
   line-height: 1.2;
 }}
 .card .hint {{
-  font-size: clamp(0.8rem, 2.8vw, 0.95rem);
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
   color: var(--accent);
   font-weight: 700;
   text-align: center;
   margin-bottom: 4px;
 }}
-.card.face-down {{
-  border-style: dashed;
-}}
-.card.face-down .title {{
-  color: var(--accent);
-  letter-spacing: 1px;
-}}
+.card.face-down {{ border-style: dashed; }}
+.card.face-down .title {{ color: var(--accent); letter-spacing: 1px; }}
 
-/* Columns wrapper - add bottom spacing */
+/* Spacing between cards and button */
 .element-container + .stButton {{
   margin-top: 24px;
 }}
@@ -167,13 +166,15 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
   font-size: 1rem;
 }}
-.stButton > button:hover {{ filter: brightness(0.95); }}
+.stButton > button:hover {{
+  filter: brightness(0.95);
+}}
 
 /* Footer */
 .footer {{
   text-align: center;
   color: var(--text);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   margin-top: 0.8rem;
 }}
 </style>
@@ -210,7 +211,7 @@ st.markdown(
 )
 
 # ---------- Cards (side by side using columns) ----------
-col1, col2 = st.columns(2, gap="large")
+col1, col2 = st.columns(2, gap="medium")
 
 if st.session_state.revealed:
     with col1:
