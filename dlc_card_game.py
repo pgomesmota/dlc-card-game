@@ -3,14 +3,14 @@ import random
 import streamlit as st
 
 # ---------- Brand / assets ----------
-BRAND_RED = "#E9462E"             # DLC red
+BRAND_RED = "#E9462E"  # DLC red
 BLACK = "#111111"
-LOGO_PATH = "dlc-logo.png"  # DLC square logo
+LOGO_PATH = "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"  # DLC logo
 
 # ---------- App config ----------
 st.set_page_config(
     page_title="Data & AI Literacy - Card Game",
-    page_icon=LOGO_PATH,          # use DLC icon for the app/page icon
+    page_icon=LOGO_PATH,  # use DLC logo as page icon
     layout="centered"
 )
 
@@ -36,25 +36,44 @@ CARD_CSS = f"""
 html, body, [data-testid="stAppViewContainer"] {{
   background: var(--bg) !important;
   color: var(--text);
+  margin: 0 !important;
+  padding: 0 !important;
 }}
-/* Title & subtitle on the right of the logo */
-.header-title h1 {{
+[data-testid="stElementContainer"] {{
+  padding: 0 !important;
+  margin: 0 !important;
+}}
+/* Header */
+.header {{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+}}
+.header img {{
+  width: 80px;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}}
+.header-content h1 {{
   margin: 0;
   font-size: clamp(1.6rem, 4.6vw, 2.4rem);
   line-height: 1.15;
   color: var(--text);
   font-weight: 800;
 }}
-.header-title p {{
+.header-content p {{
   margin: 6px 0 0 0;
   font-size: clamp(0.95rem, 3.2vw, 1.05rem);
   color: var(--text);
 }}
-.header-title b, .header-title .accent {{
+.header-content b, .header-content .accent {{
   color: var(--accent);
   font-weight: 800;
 }}
-/* Cards grid (HTML block) */
+/* Cards grid */
 .cards {{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -64,7 +83,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 @media (max-width: 768px) {{
   .cards {{ grid-template-columns: 1fr; }}
 }}
-/* Card look */
+/* Card */
 .card {{
   border-radius: 16px;
   padding: 18px 16px;
@@ -126,22 +145,21 @@ def deal_pair():
     st.session_state.ai_pick = random.choice(AI_CARDS)
     st.session_state.data_pick = random.choice(DATA_CARDS)
 
-# ---------- Header (logo left, title/subtitle right) ----------
-left, right = st.columns([1, 5], gap="small")
-with left:
-    st.image(LOGO_PATH, caption=None, use_column_width=False, width=96)
-with right:
-    st.markdown(
-        """
-<div class="header-title">
-  <h1>Data & AI Literacy - Card Game</h1>
-  <p><span class="accent">Deal a pair:</span> one <b>AI</b> card (question) + one <b>DATA</b> card (domain).</p>
+# ---------- Header ----------
+st.markdown(
+    f"""
+<div class="header">
+    <img src="{LOGO_PATH}" alt="DLC logo">
+    <div class="header-content">
+        <h1>Data & AI Literacy - Card Game</h1>
+        <p><span class="accent">Deal a pair:</span> one <b>AI</b> card (question) + one <b>DATA</b> card (domain).</p>
+    </div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+    unsafe_allow_html=True,
+)
 
-# ---------- Cards (HTML so we keep the exact look) ----------
+# ---------- Cards ----------
 st.markdown('<div class="cards">', unsafe_allow_html=True)
 
 st.markdown(
@@ -168,10 +186,10 @@ st.markdown(
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- Generate button ----------
+# ---------- Button ----------
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
 
-# ---------- Footer tip ----------
+# ---------- Footer ----------
 st.markdown(
     """
 <div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>
