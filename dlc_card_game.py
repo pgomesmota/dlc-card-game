@@ -1,7 +1,6 @@
 # streamlit_app.py
 import random
 import streamlit as st
-from base64 import b64encode
 
 # ---------- App config ----------
 st.set_page_config(
@@ -11,268 +10,177 @@ st.set_page_config(
 )
 
 # ---------- Brand / theme ----------
-BRAND_RED = "#E9462E"
+BRAND_RED = "#E9462E"  # Red from the DLC logo
 BLACK = "#111111"
+LOGO_PATH = "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"
 
-# Load logo (root: dlc-logo.png)
-LOGO_PATH = "dlc-logo.png"
-with open(LOGO_PATH, "rb") as f:
-    LOGO_B64 = b64encode(f.read()).decode()
+# ---------- Data: the two mini-decks ----------
+AI_CARDS = [
+    "WHY?", "HOW?", "WHO?", "WHEN?", "WHAT?", "WHERE?",
+    "WHAT FOR?", "WHAT IF?", "WHICH?"
+]
 
-# ---------- Mini-decks ----------
-AI_CARDS = ["WHY?", "HOW?", "WHO?", "WHEN?", "WHAT?", "WHERE?", "WHAT FOR?", "WHAT IF?", "WHICH?"]
-DATA_CARDS = ["Marketing", "Communications", "Training", "Change Management", "Leadership", "Tools", "Governance", "Mindset", "Culture"]
+DATA_CARDS = [
+    "Marketing", "Communications", "Training", "Change Management",
+    "Leadership", "Tools", "Governance", "Mindset", "Culture"
+]
 
-# ---------- CSS ----------
-CSS = f"""
+# ---------- Style ----------
+CARD_CSS = f"""
 <style>
 :root {{
   --accent: {BRAND_RED};
   --text: {BLACK};
   --bg: #ffffff;
+  --muted: #000000;
 }}
-
 html, body, [data-testid="stAppViewContainer"] {{
   background: var(--bg) !important;
   color: var(--text);
-  margin: 0 !important;
   padding: 0 !important;
+  margin: 0 !important;
 }}
-
-.block-container {{
-  padding-top: 0 !important;
-  padding-bottom: 10px !important;
-  padding-left: 12px !important;
-  padding-right: 12px !important;
+[data-testid="stElementContainer"] {{
+  padding: 0 !important;
+  margin: 0 !important;
 }}
-
-.page {{
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  row-gap: 8px;
-  min-height: calc(100vh - 10px);
-}}
-
 /* Header */
 .header {{
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 10px;
-  margin-top: 0 !important;
-}}
-.header .logo img {{
-  width: clamp(40px, 10vw, 56px);
-  height: auto;
-  border-radius: 6px;
+  gap: 12px;
+  margin: 0 0 0.6rem 0;
 }}
 .header .titles h1 {{
   margin: 0;
-  font-size: clamp(1.1rem, 4vw, 1.6rem);
-  line-height: 1.05;
-  font-weight: 900;
-  white-space: nowrap;
+  font-size: clamp(1.5rem, 4.8vw, 2.1rem);
+  line-height: 1.2;
+  color: var(--text);
 }}
-
-/* Instructions */
-.how {{
-  margin: 0;
-  font-size: clamp(0.9rem, 3.3vw, 1rem);
+.header .titles p {{
+  margin: 4px 0 0 0;
+  font-size: clamp(0.95rem, 3.2vw, 1rem);
+  color: var(--text);
 }}
-.how b {{
-  color: var(--accent);
+.header .logo img {{
+  width: clamp(60px, 16vw, 90px);
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }}
-
-/* Cards side-by-side */
+/* Cards container (responsive) */
 .cards {{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  align-items: stretch;
+  gap: 14px;
 }}
-
-/* 3D flip card */
-.card3d {{
-  perspective: 1000px;
+@media (max-width: 768px) {{
+  .cards {{
+    grid-template-columns: 1fr;
+  }}
 }}
-.card-inner {{
+/* Card */
+.card {{
+  border-radius: 16px;
+  padding: 18px 16px;
   position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s ease;
-  min-height: 120px;
-}}
-.card-inner.flipped {{
-  transform: rotateY(180deg);
-}}
-.card-face {{
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
+  border: 1.5px solid var(--accent);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  color: var(--text);
+  min-height: 150px;
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 6px;
-  padding: 12px 10px;
-  backface-visibility: hidden;
 }}
-.card-front {{
-  border: 1.5px solid var(--accent);
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}}
-.card-front .icon {{
-  font-size: clamp(20px, 5.5vw, 26px);
+.card .icon {{
+  font-size: 34px;
   line-height: 1;
-}}
-.card-front .title {{
-  font-size: clamp(1rem, 4.2vw, 1.35rem);
-  font-weight: 900;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-}}
-.card-front .hint {{
-  font-size: clamp(0.72rem, 3.2vw, 0.85rem);
   color: var(--accent);
+}}
+.card .title {{
+  font-size: clamp(1.4rem, 4.5vw, 1.8rem);
   font-weight: 800;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  color: var(--text);
 }}
-.card-back {{
-  transform: rotateY(180deg);
-  background: #fff;
-  border: 1.5px dashed var(--accent);
-  display: grid;
-  place-items: center;
-  text-align: center;
-}}
-.card-back .backmark {{
-  display: grid;
-  place-items: center;
-  gap: 6px;
-  color: var(--accent);
-  font-weight: 900;
-}}
-.card-back .logo-mini {{
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  overflow: hidden;
-  margin: 0 auto;
-}}
-.card-back .label {{
+.card .hint {{
   font-size: 0.9rem;
-  letter-spacing: 0.6px;
+  color: var(--accent);
+  font-weight: 600;
 }}
-
-/* Button - always red */
+/* Button */
 .stButton > button {{
   width: 100%;
-  padding: 11px 12px;
+  padding: 14px 16px;
   border-radius: 12px;
   border: 2px solid var(--accent);
-  background: var(--accent) !important;
-  color: #fff !important;
-  font-weight: 800;
-  font-size: clamp(0.92rem, 3.6vw, 1rem);
-}}
-.stButton > button:focus,
-.stButton > button:active {{
-  background: var(--accent) !important;
-  color: #fff !important;
-  border-color: var(--accent) !important;
-  box-shadow: none !important;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
 }}
 .stButton > button:hover {{
-  filter: brightness(0.96);
+  filter: brightness(0.95);
+}}
+/* Footer */
+.footer {{
+  text-align: center;
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-top: 0.9rem;
 }}
 </style>
 """
-st.markdown(CSS, unsafe_allow_html=True)
+st.markdown(CARD_CSS, unsafe_allow_html=True)
 
-# ---------- State ----------
+# ---------- State & helpers ----------
 if "ai_pick" not in st.session_state:
     st.session_state.ai_pick = random.choice(AI_CARDS)
 if "data_pick" not in st.session_state:
     st.session_state.data_pick = random.choice(DATA_CARDS)
-if "revealed" not in st.session_state:
-    st.session_state.revealed = False  # start facedown
 
-def deal_and_reveal():
+def deal_pair():
     st.session_state.ai_pick = random.choice(AI_CARDS)
     st.session_state.data_pick = random.choice(DATA_CARDS)
-    st.session_state.revealed = True
 
 # ---------- UI ----------
-st.markdown('<div class="page">', unsafe_allow_html=True)
-
-# Header (aligned at top)
 st.markdown(
     f"""
 <div class="header">
-  <div class="logo"><img src="data:image/png;base64,{LOGO_B64}" alt="DLC logo" /></div>
-  <div class="titles"><h1>Data & AI Literacy - Card Game</h1></div>
+  <div class="logo">
+    <img src="{LOGO_PATH}" alt="DLC logo">
+  </div>
+  <div class="titles">
+    <h1>Data & AI Literacy - Card Game</h1>
+    <p><span style="color: var(--accent); font-weight: 700;">Deal a pair:</span> one <b>AI</b> card (question) + one <b>DATA</b> card (domain).</p>
+  </div>
 </div>
 """,
     unsafe_allow_html=True,
 )
 
-# Simple instructions (shortened and clear)
-st.markdown(
-    """
-<p class="how">
-  <b>How it works:</b> Press <b>Generate card pair</b> to flip and reveal one <b>AI Card</b> with a question and one <b>DATA Card</b> with a domain. Connect them and share a quick insight about <b>Data & AI Literacy</b>.
-</p>
-""",
-    unsafe_allow_html=True,
-)
-
-# Cards (left/right)
-flipped_class = "" if st.session_state.revealed else "flipped"
+# Cards
 st.markdown('<div class="cards">', unsafe_allow_html=True)
 
-# ---- AI Card ----
 st.markdown(
     f"""
-<div class="card3d">
-  <div class="card-inner {flipped_class}">
-    <div class="card-face card-front">
-      <div class="icon">🧠</div>
-      <div class="title">{st.session_state.ai_pick}</div>
-      <div class="hint">AI CARD</div>
-    </div>
-    <div class="card-face card-back">
-      <div class="backmark">
-        <div class="logo-mini">
-          <img src="data:image/png;base64,{LOGO_B64}" alt="DLC" style="width:100%;height:100%;object-fit:cover;" />
-        </div>
-        <div class="label">AI CARD</div>
-      </div>
-    </div>
-  </div>
+<div class="card">
+  <div class="icon">🧠</div>
+  <div class="title">{st.session_state.ai_pick}</div>
+  <div class="hint">AI card</div>
 </div>
 """,
     unsafe_allow_html=True,
 )
 
-# ---- DATA Card ----
 st.markdown(
     f"""
-<div class="card3d">
-  <div class="card-inner {flipped_class}">
-    <div class="card-face card-front">
-      <div class="icon">📊</div>
-      <div class="title">{st.session_state.data_pick.upper()}</div>
-      <div class="hint">DATA CARD</div>
-    </div>
-    <div class="card-face card-back">
-      <div class="backmark">
-        <div class="logo-mini">
-          <img src="data:image/png;base64,{LOGO_B64}" alt="DLC" style="width:100%;height:100%;object-fit:cover;" />
-        </div>
-        <div class="label">DATA CARD</div>
-      </div>
-    </div>
-  </div>
+<div class="card">
+  <div class="icon">📊</div>
+  <div class="title">{st.session_state.data_pick}</div>
+  <div class="hint">DATA card</div>
 </div>
 """,
     unsafe_allow_html=True,
@@ -280,7 +188,11 @@ st.markdown(
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Button
-st.button("🎲 Generate card pair", on_click=deal_and_reveal, use_container_width=True)
+st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
 
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown(
+    """
+<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>
+""",
+    unsafe_allow_html=True,
+)
