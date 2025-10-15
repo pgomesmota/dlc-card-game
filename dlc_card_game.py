@@ -58,10 +58,21 @@ CARD_CSS = f"""
   --bg: #ffffff;
 }}
 html, body, [data-testid="stAppViewContainer"] {{
-  background: var(--bg) !important; color: var(--text);
-  margin: 0 !important; padding: 0 !important;
+  background: var(--bg) !important;
+  color: var(--text);
+  margin: 0 !important;
+  padding: 0 !important;
 }}
-[data-testid="stElementContainer"] {{ padding: 0 !important; margin: 0 !important; }}
+[data-testid="stElementContainer"] {{
+  padding: 0 !important;
+  margin: 0 !important;
+}}
+
+/* 🔽 Remove Streamlit default top padding */
+[data-testid="stMainBlockContainer"] {{
+  padding-top: 0rem !important;
+  margin-top: 0rem !important;
+}}
 
 /* Header */
 .header {{
