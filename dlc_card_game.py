@@ -71,19 +71,22 @@ html, body, [data-testid="stAppViewContainer"] {{
 .header .top {{ display: flex; align-items: center; justify-content: center; gap: 12px; }}
 .header .top img {{ width: 72px; height: auto; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }}
 .header .top h1 {{ margin: 0; font-size: clamp(1.5rem, 4vw, 2.3rem); color: var(--text); font-weight: 900; }}
-.header .subtitle {{ margin-top: .4rem; font-size: clamp(.9rem, 2.5vw, 1.05rem); color: var(--text); }}
+
+/* One-line subtitle: no wraps */
+.header .subtitle {{
+  margin-top: .4rem;
+  font-size: clamp(.9rem, 2.5vw, 1.05rem);
+  color: var(--text);
+  white-space: nowrap;           /* keep on one line */
+  overflow: hidden;              /* safeguard */
+  text-overflow: ellipsis;       /* if ever too narrow */
+}}
 .header .subtitle .accent, .header .subtitle b {{ color: var(--accent); font-weight: 800; }}
 
-/* Cards Row */
+/* Cards Row (side-by-side, even on mobile) */
 .cards-row {{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: stretch;
-  gap: 14px;
-  flex-wrap: nowrap;
-  margin-top: 10px;
-  margin-bottom: 24px;
+  display: flex; flex-direction: row; justify-content: center; align-items: stretch;
+  gap: 14px; flex-wrap: nowrap; margin-top: 10px; margin-bottom: 24px;
 }}
 @media (max-width: 430px) {{
   .cards-row {{ gap: 10px; }}
@@ -104,40 +107,46 @@ html, body, [data-testid="stAppViewContainer"] {{
 .card .icon {{ display: flex; justify-content: center; align-items: center; margin-top: 4px; }}
 .card .icon img {{ width: 64px; height: 64px; object-fit: contain; }}
 .card .title {{ font-size: clamp(1rem, 3.4vw, 1.35rem); font-weight: 900; text-align: center; line-height: 1.2; }}
-.card .hint {{ font-size: clamp(.75rem, 2.6vw, .9rem); color: var(--accent); font-weight: 700; text-align: center; margin-bottom: 4px; }}
+
+/* Hint: uppercase and bold */
+.card .hint {{
+  font-size: clamp(.75rem, 2.6vw, .9rem);
+  color: var(--accent);
+  font-weight: 800;
+  text-transform: uppercase;     /* ensure capitals */
+  text-align: center;
+  margin-bottom: 4px;
+}}
 .card.face-down {{ border-style: dashed; }}
 .card.face-down .title {{ color: var(--accent); letter-spacing: 1px; }}
 
-/* Button */
+/* Button: always red + press feel */
 .stButton > button {{
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
+  width: 100%; padding: 12px 14px; border-radius: 12px;
   border: 2px solid var(--accent);
-  background: var(--accent) !important;  /* Force red always */
+  background: var(--accent) !important;  /* always red */
   color: #fff !important;
-  font-weight: 800;
-  font-size: 1rem;
-  transition: none !important;
-}}
-.stButton > button:hover {{
-  filter: brightness(0.95);
-}}
-/* Prevent color change on click/active */
-.stButton > button:active,
-.stButton > button:focus {{
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: none !important;
+  font-weight: 800; font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(181, 52, 32, 0.9);  /* fake depth */
+  transition: transform 80ms ease, box-shadow 80ms ease;  /* press feel */
   outline: none !important;
 }}
+.stButton > button:hover {{
+  filter: brightness(0.98);
+}}
+.stButton > button:active {{
+  background: var(--accent) !important; color: #fff !important;
+  transform: translateY(2px);                 /* pressed */
+  box-shadow: 0 3px 0 rgba(181, 52, 32, 0.9); /* reduced depth */
+}}
+.stButton > button:focus {{ box-shadow: 0 6px 0 rgba(181, 52, 32, 0.9) !important; }}
 
-/* Footer */
+/* Footer tip: one line, no wraps */
 .footer {{
-  text-align: center;
-  color: var(--text);
-  font-size: .9rem;
-  margin-top: .8rem;
+  text-align: center; color: var(--text);
+  font-size: .9rem; margin-top: .8rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }}
 </style>
 """
@@ -172,19 +181,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------- Cards (flexbox for perfect alignment) ----------
+# ---------- Cards (flexbox row) ----------
 if st.session_state.revealed:
     cards_html = f"""
 <div class="cards-row">
   <div class="card">
     <div class="icon">{'<img src="'+AI_ICON_URI+'" alt="AI icon">' if AI_ICON_URI else ''}</div>
     <div class="title">{st.session_state.ai_pick}</div>
-    <div class="hint">AI card</div>
+    <div class="hint">AI CARD</div>
   </div>
   <div class="card">
     <div class="icon">{'<img src="'+DATA_ICON_URI+'" alt="DATA icon">' if DATA_ICON_URI else ''}</div>
     <div class="title">{st.session_state.data_pick.upper()}</div>
-    <div class="hint">DATA card</div>
+    <div class="hint">DATA CARD</div>
   </div>
 </div>
 """
@@ -194,12 +203,12 @@ else:
   <div class="card face-down">
     <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
     <div class="title">?</div>
-    <div class="hint">AI card</div>
+    <div class="hint">AI CARD</div>
   </div>
   <div class="card face-down">
     <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
     <div class="title">?</div>
-    <div class="hint">DATA card</div>
+    <div class="hint">DATA CARD</div>
   </div>
 </div>
 """
