@@ -19,7 +19,7 @@ def find_image(cands):
     return None
 
 # ---------- Assets ----------
-LOGO_PATH = find_image(["dlc-logo.png","./dlc-logo.png","/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"])
+LOGO_PATH = find_image(["dlc-logo.png","./dlc-logo.png"])
 AI_ICON_PATH = find_image(["ai-icon.png","./ai-icon.png"])
 DATA_ICON_PATH = find_image(["data-icon.png","./data-icon.png"])
 
@@ -102,29 +102,30 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Cards grid */
+/* Cards grid: now vertical layout */
 .cards {{
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 16px;
   margin-top: 6px;
 }}
-@media (max-width: 768px) {{
-  .cards {{ grid-template-columns: 1fr; }}
-}}
 
-/* Card base */
+/* Card base: portrait orientation */
 .card {{
+  width: min(360px, 92vw);
+  aspect-ratio: 2 / 3;
   border-radius: 16px;
   padding: 18px 16px;
   border: 2px solid var(--accent);
   background: #fff;
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-  min-height: 150px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  align-items: start;
   color: var(--text);
 }}
 .card .icon {{
@@ -140,7 +141,6 @@ html, body, [data-testid="stAppViewContainer"] {{
 .card .title {{
   font-size: clamp(1.4rem, 4.5vw, 1.9rem);
   font-weight: 900;
-  letter-spacing: 0.2px;
   text-align: center;
 }}
 .card .hint {{
@@ -214,7 +214,7 @@ st.markdown(
 st.markdown('<div class="cards">', unsafe_allow_html=True)
 
 if st.session_state.revealed:
-    # AI card (face-up)
+    # AI card
     st.markdown(
         f"""
 <div class="card">
@@ -225,7 +225,7 @@ if st.session_state.revealed:
 """,
         unsafe_allow_html=True,
     )
-    # DATA card (face-up)
+    # DATA card
     st.markdown(
         f"""
 <div class="card">
@@ -237,7 +237,7 @@ if st.session_state.revealed:
         unsafe_allow_html=True,
     )
 else:
-    # Face-down cards (DLC logo, ?, dashed)
+    # Face-down cards
     st.markdown(
         f"""
 <div class="card face-down">
@@ -263,5 +263,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------- Button & Footer ----------
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
-st.markdown('<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>',
-            unsafe_allow_html=True)
+st.markdown(
+    '<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>',
+    unsafe_allow_html=True,
+)
