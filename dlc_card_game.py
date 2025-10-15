@@ -58,125 +58,67 @@ CARD_CSS = f"""
   --bg: #ffffff;
 }}
 html, body, [data-testid="stAppViewContainer"] {{
-  background: var(--bg) !important;
-  color: var(--text);
-  margin: 0 !important;
-  padding: 0 !important;
+  background: var(--bg) !important; color: var(--text);
+  margin: 0 !important; padding: 0 !important;
 }}
-[data-testid="stElementContainer"] {{
-  padding: 0 !important;
-  margin: 0 !important;
-}}
+[data-testid="stElementContainer"] {{ padding: 0 !important; margin: 0 !important; }}
 
 /* Header */
 .header {{
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  margin-bottom: 1rem; text-align: center;
+}}
+.header .top {{ display: flex; align-items: center; justify-content: center; gap: 12px; }}
+.header .top img {{ width: 72px; height: auto; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }}
+.header .top h1 {{ margin: 0; font-size: clamp(1.5rem, 4vw, 2.3rem); color: var(--text); font-weight: 900; }}
+.header .subtitle {{ margin-top: .4rem; font-size: clamp(.9rem, 2.5vw, 1.05rem); color: var(--text); }}
+.header .subtitle .accent, .header .subtitle b {{ color: var(--accent); font-weight: 800; }}
+
+/* --- NEW: Cards row that forces side-by-side --- */
+.cards-row {{
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-  margin-bottom: 1rem;
-  text-align: center;
+  align-items: stretch;
+  gap: 14px;
+  flex-wrap: nowrap;            /* never wrap to next line */
+  margin-top: 10px;
+  margin-bottom: 24px;          /* space above the button */
 }}
-.header .top {{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}}
-.header .top img {{
-  width: 72px;
-  height: auto;
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-}}
-.header .top h1 {{
-  margin: 0;
-  font-size: clamp(1.5rem, 4vw, 2.3rem);
-  color: var(--text);
-  font-weight: 900;
-}}
-.header .subtitle {{
-  margin-top: 0.4rem;
-  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
-  color: var(--text);
-}}
-.header .subtitle .accent,
-.header .subtitle b {{
-  color: var(--accent);
-  font-weight: 800;
+/* On very small screens keep them side-by-side and shrink */
+@media (max-width: 430px) {{
+  .cards-row {{ gap: 10px; }}
 }}
 
 /* Card base */
 .card {{
-  width: clamp(120px, 35vw, 180px);  /* smaller for iPhone */
+  width: clamp(130px, 44vw, 210px); /* ~2 cards on iPhone widths */
   aspect-ratio: 2 / 3;
   border-radius: 14px;
   padding: 12px 10px;
   border: 2px solid var(--accent);
   background: #fff;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  color: var(--text);
-  margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  gap: 8px; color: var(--text);
 }}
-.card .icon {{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 4px;
-}}
-.card .icon img {{
-  width: 64px;  /* reduced for mobile */
-  height: 64px;
-  object-fit: contain;
-}}
-.card .title {{
-  font-size: clamp(1rem, 3vw, 1.3rem);
-  font-weight: 900;
-  text-align: center;
-  line-height: 1.2;
-}}
-.card .hint {{
-  font-size: clamp(0.75rem, 2vw, 0.9rem);
-  color: var(--accent);
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 4px;
-}}
+.card .icon {{ display: flex; justify-content: center; align-items: center; margin-top: 4px; }}
+.card .icon img {{ width: 64px; height: 64px; object-fit: contain; }}
+.card .title {{ font-size: clamp(1rem, 3.4vw, 1.35rem); font-weight: 900; text-align: center; line-height: 1.2; }}
+.card .hint {{ font-size: clamp(.75rem, 2.6vw, .9rem); color: var(--accent); font-weight: 700; text-align: center; margin-bottom: 4px; }}
 .card.face-down {{ border-style: dashed; }}
 .card.face-down .title {{ color: var(--accent); letter-spacing: 1px; }}
 
-/* Spacing between cards and button */
-.element-container + .stButton {{
-  margin-top: 24px;
-}}
-
 /* Button */
 .stButton > button {{
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 2px solid var(--accent);
-  background: var(--accent);
-  color: #fff;
-  font-weight: 800;
-  font-size: 1rem;
+  width: 100%; padding: 12px 14px; border-radius: 12px;
+  border: 2px solid var(--accent); background: var(--accent); color: #fff;
+  font-weight: 800; font-size: 1rem;
 }}
-.stButton > button:hover {{
-  filter: brightness(0.95);
-}}
+.stButton > button:hover {{ filter: brightness(0.95); }}
 
 /* Footer */
-.footer {{
-  text-align: center;
-  color: var(--text);
-  font-size: 0.9rem;
-  margin-top: 0.8rem;
-}}
+.footer {{ text-align: center; color: var(--text); font-size: .9rem; margin-top: .8rem; }}
 </style>
 """
 st.markdown(CARD_CSS, unsafe_allow_html=True)
@@ -210,58 +152,40 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------- Cards (side by side using columns) ----------
-col1, col2 = st.columns(2, gap="medium")
-
+# ---------- Cards (single HTML row to FORCE side-by-side) ----------
 if st.session_state.revealed:
-    with col1:
-        st.markdown(
-            f"""
-<div class="card">
-  <div class="icon">{'<img src="'+AI_ICON_URI+'" alt="AI icon">' if AI_ICON_URI else ''}</div>
-  <div class="title">{st.session_state.ai_pick}</div>
-  <div class="hint">AI card</div>
+    cards_html = f"""
+<div class="cards-row">
+  <div class="card">
+    <div class="icon">{'<img src="'+AI_ICON_URI+'" alt="AI icon">' if AI_ICON_URI else ''}</div>
+    <div class="title">{st.session_state.ai_pick}</div>
+    <div class="hint">AI card</div>
+  </div>
+  <div class="card">
+    <div class="icon">{'<img src="'+DATA_ICON_URI+'" alt="DATA icon">' if DATA_ICON_URI else ''}</div>
+    <div class="title">{st.session_state.data_pick.upper()}</div>
+    <div class="hint">DATA card</div>
+  </div>
 </div>
-""",
-            unsafe_allow_html=True,
-        )
-    with col2:
-        st.markdown(
-            f"""
-<div class="card">
-  <div class="icon">{'<img src="'+DATA_ICON_URI+'" alt="DATA icon">' if DATA_ICON_URI else ''}</div>
-  <div class="title">{st.session_state.data_pick.upper()}</div>
-  <div class="hint">DATA card</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+"""
 else:
-    with col1:
-        st.markdown(
-            f"""
-<div class="card face-down">
-  <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
-  <div class="title">?</div>
-  <div class="hint">AI card</div>
+    cards_html = f"""
+<div class="cards-row">
+  <div class="card face-down">
+    <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
+    <div class="title">?</div>
+    <div class="hint">AI card</div>
+  </div>
+  <div class="card face-down">
+    <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
+    <div class="title">?</div>
+    <div class="hint">DATA card</div>
+  </div>
 </div>
-""",
-            unsafe_allow_html=True,
-        )
-    with col2:
-        st.markdown(
-            f"""
-<div class="card face-down">
-  <div class="icon">{'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}</div>
-  <div class="title">?</div>
-  <div class="hint">DATA card</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+"""
+st.markdown(cards_html, unsafe_allow_html=True)
 
 # ---------- Button & Footer ----------
-st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
 st.markdown('<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>',
             unsafe_allow_html=True)
