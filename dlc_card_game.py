@@ -76,17 +76,21 @@ html, body, [data-testid="stAppViewContainer"] {{
 .card {{
   border-radius: 16px; padding: 18px 16px; border: 2px solid var(--accent); background: #fff;
   box-shadow: 0 8px 24px rgba(0,0,0,0.06); color: var(--text); min-height: 150px;
-  display: grid; grid-template-rows: auto 1fr auto; gap: 6px;
+  display: grid; grid-template-rows: auto 1fr auto; gap: 8px;
+  align-items: start;
+}}
+.card .icon {{
+  display: flex; justify-content: center; align-items: center;
 }}
 .card .icon img {{
-  width: 42px; height: 42px; object-fit: contain;
+  width: 56px; height: 56px; object-fit: contain;
 }}
 .card .title {{
   font-size: clamp(1.4rem, 4.5vw, 1.9rem);
-  font-weight: 900; letter-spacing: 0.2px; color: var(--text);
+  font-weight: 900; letter-spacing: 0.2px; color: var(--text); text-align: center;
 }}
 .card .hint {{
-  font-size: 0.95rem; color: var(--accent); font-weight: 700;
+  font-size: 0.95rem; color: var(--accent); font-weight: 700; text-align: center;
 }}
 .stButton > button {{
   width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid var(--accent);
