@@ -19,7 +19,7 @@ def find_image(cands):
     return None
 
 # ---------- Assets ----------
-LOGO_PATH = find_image(["dlc-logo.png","./dlc-logo.png"])
+LOGO_PATH = find_image(["dlc-logo.png","./dlc-logo.png","/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"])
 AI_ICON_PATH = find_image(["ai-icon.png","./ai-icon.png"])
 DATA_ICON_PATH = find_image(["data-icon.png","./data-icon.png"])
 
@@ -69,31 +69,31 @@ html, body, [data-testid="stAppViewContainer"] {{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.0rem;
   text-align: center;
 }}
 .header .top {{
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
 }}
 .header .top img {{
-  width: 80px;
+  width: 72px;
   height: auto;
   border-radius: 6px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }}
 .header .top h1 {{
   margin: 0;
-  font-size: clamp(1.7rem, 4.8vw, 2.6rem);
+  font-size: clamp(1.6rem, 4.6vw, 2.4rem);
   line-height: 1.12;
   color: var(--text);
   font-weight: 900;
 }}
 .header .subtitle {{
   margin-top: 0.4rem;
-  font-size: clamp(0.98rem, 3.1vw, 1.08rem);
+  font-size: clamp(0.96rem, 3vw, 1.06rem);
   color: var(--text);
 }}
 .header .subtitle .accent,
@@ -102,24 +102,25 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Cards grid: now vertical layout */
+/* Cards grid: two columns, even on mobile */
 .cards {{
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-items: center;
-  gap: 16px;
+  align-items: start;
+  gap: 12px;
   margin-top: 6px;
 }}
 
-/* Card base: portrait orientation */
+/* Card base: portrait, phone-friendly sizing */
 .card {{
-  width: min(360px, 92vw);
-  aspect-ratio: 2 / 3;
-  border-radius: 16px;
-  padding: 18px 16px;
+  width: clamp(140px, 42vw, 300px);   /* fits two across on phones */
+  aspect-ratio: 2 / 3;                /* portrait */
+  border-radius: 14px;
+  padding: 14px 12px;
   border: 2px solid var(--accent);
   background: #fff;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 
   display: flex;
   flex-direction: column;
@@ -132,22 +133,25 @@ html, body, [data-testid="stAppViewContainer"] {{
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 2px;
 }}
 .card .icon img {{
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
 }}
 .card .title {{
-  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+  font-size: clamp(1.1rem, 3.8vw, 1.6rem);
   font-weight: 900;
   text-align: center;
+  line-height: 1.2;
 }}
 .card .hint {{
-  font-size: 0.95rem;
+  font-size: clamp(0.8rem, 2.8vw, 0.95rem);
   color: var(--accent);
   font-weight: 700;
   text-align: center;
+  margin-bottom: 2px;
 }}
 .card.face-down {{
   border-style: dashed;
@@ -160,7 +164,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 /* Button */
 .stButton > button {{
   width: 100%;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-radius: 12px;
   border: 2px solid var(--accent);
   background: var(--accent);
@@ -174,8 +178,8 @@ html, body, [data-testid="stAppViewContainer"] {{
 .footer {{
   text-align: center;
   color: var(--text);
-  font-size: 0.95rem;
-  margin-top: 0.9rem;
+  font-size: 0.92rem;
+  margin-top: 0.8rem;
 }}
 </style>
 """
@@ -214,7 +218,7 @@ st.markdown(
 st.markdown('<div class="cards">', unsafe_allow_html=True)
 
 if st.session_state.revealed:
-    # AI card
+    # AI card (face-up)
     st.markdown(
         f"""
 <div class="card">
@@ -225,7 +229,7 @@ if st.session_state.revealed:
 """,
         unsafe_allow_html=True,
     )
-    # DATA card
+    # DATA card (face-up)
     st.markdown(
         f"""
 <div class="card">
@@ -263,7 +267,5 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------- Button & Footer ----------
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
-st.markdown(
-    '<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>',
-    unsafe_allow_html=True,
-)
+st.markdown('<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>',
+            unsafe_allow_html=True)
