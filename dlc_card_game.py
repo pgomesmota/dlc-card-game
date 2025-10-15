@@ -245,6 +245,6 @@ else:
 st.markdown(cards_html, unsafe_allow_html=True)
 
 # ---------- Button & Footer ----------
-st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
+st.button("🃏 Deal card pair", on_click=deal_pair, use_container_width=True)
 st.markdown('<div class="footer">Tip: Use each pair to spark a discussion about Literacy.</div>',
             unsafe_allow_html=True)
