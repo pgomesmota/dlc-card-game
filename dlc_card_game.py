@@ -3,38 +3,43 @@ import os, base64, random
 from PIL import Image
 import streamlit as st
 
-# ---------- Locate logo ----------
-CANDIDATES = [
-    "dlc-logo.png", "./dlc-logo.png", "assets/dlc-logo.png",
-    "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"  # fallback
-]
-LOGO_PATH = next((p for p in CANDIDATES if os.path.exists(p)), None)
-
+# ---------- Locate logo & icons ----------
 def image_to_data_uri(path: str) -> str:
     with open(path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode("utf-8")
     ext = os.path.splitext(path)[1].lower().replace(".", "") or "png"
-    return f"data:image/{'png' if ext not in ['png','jpg','jpeg','gif','webp','svg'] else ext};base64,{b64}"
+    return f"data:image/{ext};base64,{b64}"
 
-# ---------- App config (must be first Streamlit call) ----------
+def find_image(name_list):
+    for p in name_list:
+        if os.path.exists(p):
+            return p
+    return None
+
+LOGO_PATH = find_image(["dlc-logo.png", "./dlc-logo.png", "/mnt/data/de31a37a-11e6-4fc0-a566-b321e6971d63.png"])
+AI_ICON_PATH = find_image(["ai-icon.png", "./ai-icon.png"])
+DATA_ICON_PATH = find_image(["data-icon.png", "./data-icon.png"])
+
+LOGO_URI = image_to_data_uri(LOGO_PATH) if LOGO_PATH else ""
+AI_ICON_URI = image_to_data_uri(AI_ICON_PATH) if AI_ICON_PATH else ""
+DATA_ICON_URI = image_to_data_uri(DATA_ICON_PATH) if DATA_ICON_PATH else ""
+
+# ---------- App config ----------
 if LOGO_PATH:
     try:
         st.set_page_config(page_title="Data & AI Literacy - Card Game",
                            page_icon=Image.open(LOGO_PATH),
                            layout="centered")
     except Exception:
-        st.set_page_config(page_title="Data & AI Literacy - Card Game",
-                           page_icon="🧠", layout="centered")
+        st.set_page_config(page_title="Data & AI Literacy - Card Game", page_icon="🧠", layout="centered")
 else:
-    st.set_page_config(page_title="Data & AI Literacy - Card Game",
-                       page_icon="🧠", layout="centered")
+    st.set_page_config(page_title="Data & AI Literacy - Card Game", page_icon="🧠", layout="centered")
 
 # ---------- Brand / theme ----------
 BRAND_RED = "#E9462E"
 BLACK = "#111111"
-LOGO_DATA_URI = image_to_data_uri(LOGO_PATH) if LOGO_PATH else ""
 
-# ---------- Data: the two mini-decks ----------
+# ---------- Data ----------
 AI_CARDS = ["WHY?", "HOW?", "WHO?", "WHEN?", "WHAT?", "WHERE?", "WHAT FOR?", "WHAT IF?", "WHICH?"]
 DATA_CARDS = ["Marketing", "Communications", "Training", "Change Management", "Leadership",
               "Tools", "Governance", "Mindset", "Culture"]
@@ -73,9 +78,16 @@ html, body, [data-testid="stAppViewContainer"] {{
   box-shadow: 0 8px 24px rgba(0,0,0,0.06); color: var(--text); min-height: 150px;
   display: grid; grid-template-rows: auto 1fr auto; gap: 6px;
 }}
-.card .icon {{ font-size: 34px; line-height: 1; color: var(--accent); }}
-.card .title {{ font-size: clamp(1.4rem, 4.5vw, 1.9rem); font-weight: 900; letter-spacing: 0.2px; color: var(--text); }}
-.card .hint {{ font-size: 0.95rem; color: var(--accent); font-weight: 700; }}
+.card .icon img {{
+  width: 42px; height: 42px; object-fit: contain;
+}}
+.card .title {{
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+  font-weight: 900; letter-spacing: 0.2px; color: var(--text);
+}}
+.card .hint {{
+  font-size: 0.95rem; color: var(--accent); font-weight: 700;
+}}
 .stButton > button {{
   width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid var(--accent);
   background: var(--accent); color: #fff; font-weight: 800; font-size: 1rem;
@@ -96,11 +108,11 @@ def deal_pair():
     st.session_state.ai_pick = random.choice(AI_CARDS)
     st.session_state.data_pick = random.choice(DATA_CARDS)
 
-# ---------- Header (logo left, title right) ----------
+# ---------- Header ----------
 st.markdown(
     f"""
 <div class="header">
-    {'<img src="'+LOGO_DATA_URI+'" alt="DLC logo">' if LOGO_DATA_URI else ''}
+    {'<img src="'+LOGO_URI+'" alt="DLC logo">' if LOGO_URI else ''}
     <div class="header-content">
         <h1>Data & AI Literacy - Card Game</h1>
         <p><span class="accent">Deal a pair:</span> one <b>AI</b> card (question) + one <b>DATA</b> card (domain).</p>
@@ -115,7 +127,7 @@ st.markdown('<div class="cards">', unsafe_allow_html=True)
 st.markdown(
     f"""
 <div class="card">
-  <div class="icon">🧠</div>
+  <div class="icon">{'<img src="'+AI_ICON_URI+'" alt="AI icon">' if AI_ICON_URI else '🧠'}</div>
   <div class="title">{st.session_state.ai_pick}</div>
   <div class="hint">AI card</div>
 </div>
@@ -124,7 +136,7 @@ st.markdown(
 st.markdown(
     f"""
 <div class="card">
-  <div class="icon">📊</div>
+  <div class="icon">{'<img src="'+DATA_ICON_URI+'" alt="DATA icon">' if DATA_ICON_URI else '📊'}</div>
   <div class="title">{st.session_state.data_pick}</div>
   <div class="hint">DATA card</div>
 </div>
