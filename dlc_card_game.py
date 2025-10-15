@@ -102,7 +102,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Card base: portrait, mobile-friendly and centered in column */
+/* Card base */
 .card {{
   width: min(320px, 90%);
   aspect-ratio: 2 / 3;
@@ -111,14 +111,13 @@ html, body, [data-testid="stAppViewContainer"] {{
   border: 2px solid var(--accent);
   background: #fff;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   color: var(--text);
-  margin: 0 auto; /* center inside column */
+  margin: 0 auto;
 }}
 .card .icon {{
   display: flex;
@@ -126,7 +125,6 @@ html, body, [data-testid="stAppViewContainer"] {{
   align-items: center;
   margin-top: 4px;
 }}
-/* Bigger icons (double size) */
 .card .icon img {{
   width: 88px;
   height: 88px;
@@ -145,8 +143,18 @@ html, body, [data-testid="stAppViewContainer"] {{
   text-align: center;
   margin-bottom: 4px;
 }}
-.card.face-down {{ border-style: dashed; }}
-.card.face-down .title {{ color: var(--accent); letter-spacing: 1px; }}
+.card.face-down {{
+  border-style: dashed;
+}}
+.card.face-down .title {{
+  color: var(--accent);
+  letter-spacing: 1px;
+}}
+
+/* Columns wrapper - add bottom spacing */
+.element-container + .stButton {{
+  margin-top: 24px;
+}}
 
 /* Button */
 .stButton > button {{
@@ -252,6 +260,7 @@ else:
         )
 
 # ---------- Button & Footer ----------
+st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 st.button("🎲 Generate card pair", on_click=deal_pair, use_container_width=True)
 st.markdown('<div class="footer">Tip: Use each pair to spark a short discussion Data & AI Literacy.</div>',
             unsafe_allow_html=True)
