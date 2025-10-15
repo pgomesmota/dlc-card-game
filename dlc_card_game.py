@@ -102,26 +102,33 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Cards: single column, centered */
+/* Cards container — always side by side, centered */
 .cards {{
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
-  gap: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: nowrap;
   margin-top: 12px;
   text-align: center;
 }}
+@media (max-width: 600px) {{
+  .cards {{
+    gap: 12px;
+    transform: scale(0.9);
+  }}
+}}
 
-/* Card base: portrait, mobile-friendly */
+/* Card base: portrait, responsive */
 .card {{
-  width: clamp(130px, 40vw, 240px);
+  width: clamp(140px, 38vw, 240px);
   aspect-ratio: 2 / 3;
   border-radius: 14px;
-  padding: 14px 12px;
+  padding: 16px 14px;
   border: 2px solid var(--accent);
   background: #fff;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,7 +142,7 @@ html, body, [data-testid="stAppViewContainer"] {{
   align-items: center;
   margin-top: 4px;
 }}
-/* Doubled icon size */
+/* Bigger icons (double size) */
 .card .icon img {{
   width: 88px;
   height: 88px;
