@@ -102,13 +102,12 @@ html, body, [data-testid="stAppViewContainer"] {{
   font-weight: 800;
 }}
 
-/* Cards container — side by side and vertically centered */
+/* Cards: single column, centered */
 .cards {{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 16px;
   margin-top: 12px;
   text-align: center;
 }}
@@ -136,9 +135,10 @@ html, body, [data-testid="stAppViewContainer"] {{
   align-items: center;
   margin-top: 4px;
 }}
+/* Doubled icon size */
 .card .icon img {{
-  width: 44px;
-  height: 44px;
+  width: 88px;
+  height: 88px;
   object-fit: contain;
 }}
 .card .title {{
