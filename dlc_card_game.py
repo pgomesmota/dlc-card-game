@@ -49,8 +49,8 @@ BLACK = "#111111"
 
 # ---------- Data ----------
 AI_CARDS = ["WHY?", "HOW?", "WHO?", "WHEN?", "WHAT?", "WHERE?", "WHAT FOR?", "WHAT IF?", "WHICH?"]
-DATA_CARDS = ["Marketing", "Communications", "Training", "Change Management", "Leadership",
-              "Tools", "Governance", "Mindset", "Culture"]
+DATA_CARDS = ["MARKETING", "COMMUNICATIONS", "TRAINING", "CHANGE MANAGEMENT", "LEADERSHIP",
+              "TOOLS", "GOVERNANCE", "MINDSET", "CULTURE"]
 
 # ---------- Styles ----------
 CARD_CSS = f"""
